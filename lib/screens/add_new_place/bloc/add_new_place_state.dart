@@ -1,19 +1,19 @@
 part of 'add_new_place_bloc.dart';
 
 @immutable
-abstract class AddNewPlaceState {}
+sealed class AddNewPlaceState {}
 
-class AddNewPlaceInitialState extends AddNewPlaceState {}
+class AddNewPlaceInitialState implements AddNewPlaceState {}
 
-class AddNewPlaceLoadingState extends AddNewPlaceState {}
+class AddNewPlaceLoadingState implements AddNewPlaceState {}
 
-class AddNewPlaceSuccessState extends AddNewPlaceState {
+class AddNewPlaceSuccessState implements AddNewPlaceState {
   final AddNewPlaceScreenData data;
 
   AddNewPlaceSuccessState(this.data);
 }
 
-class AddNewPlaceFailedState extends AddNewPlaceState {
+class AddNewPlaceFailedState implements AddNewPlaceState {
   final dynamic error;
 
   AddNewPlaceFailedState(this.error);

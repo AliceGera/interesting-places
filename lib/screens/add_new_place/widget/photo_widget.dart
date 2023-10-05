@@ -1,8 +1,8 @@
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:interesting_places/screens/add_new_place/bloc/add_new_place_bloc.dart';
+import 'package:interesting_places/utils/app_images.dart';
 
 class PhotoWidget extends StatelessWidget {
   const PhotoWidget({
@@ -24,8 +24,8 @@ class PhotoWidget extends StatelessWidget {
         alignment: Alignment.topRight,
         children: [
           SizedBox(
-            height: 60,
-            width: 60,
+            height: 72,
+            width: 72,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: Image.memory(
@@ -38,7 +38,7 @@ class PhotoWidget extends StatelessWidget {
             onTap: () {
               bloc.add(RemovePhotoForNewPlaceEvent(index));
             },
-            child: SvgPicture.asset('assets/images/clear.svg'),
+            child: SvgPicture.asset(AppImages.clear),
           ),
         ],
       ),

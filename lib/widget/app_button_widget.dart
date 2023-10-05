@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:interesting_places/utils/app_color.dart';
+import 'package:interesting_places/utils/app_text_style.dart';
 
 class AppButtonWidget extends StatelessWidget {
   final String title;
   final bool isEnable;
-  final void Function()? onPressed;
-
+  final VoidCallback? onPressed;
+  final int? index;
   const AppButtonWidget({
     Key? key,
     required this.title,
     this.isEnable = true,
     this.onPressed,
+    this.index,
   }) : super(key: key);
 
   @override
@@ -19,19 +22,25 @@ class AppButtonWidget extends StatelessWidget {
       width: double.infinity,
       child: ElevatedButton(
         style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all<Color>(isEnable ? const Color(0xFF4CAF50) : const Color(0xFFF5F5F5)),
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(16))),
+          backgroundColor: MaterialStateProperty.all<Color>(
+            isEnable ? AppColor.green : AppColor.background,
+          ),
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+          ),
         ),
         onPressed: onPressed,
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 16),
+          padding: const EdgeInsets.symmetric(
+            vertical: 15,
+            horizontal: 16,
+          ),
           child: Text(
             title.toUpperCase(),
-            style: TextStyle(
-              fontSize: 14,
-              height: 1.28,
-              fontWeight: FontWeight.w700,
-              color: isEnable ? Colors.white : const Color(0x8F7C7E92),
+            style: AppTextStyle.button.copyWith(
+              color: isEnable ? AppColor.white : AppColor.inactiveBlack,
             ),
           ),
         ),

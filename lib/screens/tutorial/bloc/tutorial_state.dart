@@ -1,14 +1,15 @@
 part of 'tutorial_bloc.dart';
 
-abstract class TutorialState {}
+sealed class TutorialState {}
 
-class TutorialInitialState extends TutorialState {}
+class TutorialInitialState implements TutorialState {}
 
-class TutorialLoadingState extends TutorialState {}
+class TutorialLoadingState implements TutorialState {}
 
-class TutorialSuccessState extends TutorialState {}
+class TutorialSuccessState implements TutorialState {}
 
-class TutorialFailedState extends TutorialState {
+class TutorialFailedState implements TutorialState {
   final dynamic error;
+
   TutorialFailedState(this.error);
 }

@@ -1,11 +1,18 @@
 import 'dart:typed_data';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:interesting_places/repository/repository.dart';
+import 'package:interesting_places/screens/add_new_place/widget/category_widget.dart';
+import 'package:interesting_places/screens/add_new_place/widget/latitude_and_longitude_widget.dart';
 import 'package:interesting_places/screens/add_new_place/widget/photo_widget.dart';
-import '../../widget/indicator_widget.dart';
+import 'package:interesting_places/screens/add_new_place/widget/point_to_map_widget.dart';
+import 'package:interesting_places/utils/app_color.dart';
+import 'package:interesting_places/utils/app_images.dart';
+import 'package:interesting_places/utils/app_text_style.dart';
+import 'package:interesting_places/widget/app_button_widget.dart';
+import 'package:interesting_places/widget/indicator_widget.dart';
+import 'widget/text_field_widget.dart';
 import 'bloc/add_new_place_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -18,23 +25,12 @@ class AddNewPlaceScreen extends StatefulWidget {
   State<AddNewPlaceScreen> createState() => _AddNewPlaceScreenState();
 }
 
+final ImageRepository repository = ImageRepository();
+
 class _AddNewPlaceScreenState extends State<AddNewPlaceScreen> {
   final PageController controller = PageController();
   var index = 0;
   Uint8List imageFile = Uint8List(0);
-
-  Future<Uint8List?> _getFromGallery() async {
-    final pickedFile = await ImagePicker().pickImage(
-      source: ImageSource.gallery,
-      maxWidth: 1800,
-      maxHeight: 1800,
-    );
-    if (pickedFile != null) {
-      final uint8List = await pickedFile.readAsBytes();
-      return uint8List;
-    }
-    return null;
-  }
 
   Future<Uint8List?> _showActionSheet(BuildContext context) async {
     return showCupertinoModalPopup<Uint8List?>(
@@ -44,25 +40,23 @@ class _AddNewPlaceScreenState extends State<AddNewPlaceScreen> {
           CupertinoActionSheetAction(
             isDefaultAction: true,
             onPressed: () async {
-              await _getFromGallery().then((value) => Navigator.of(context).pop(value));
+              await repository.getFromGallery().then((value) => Navigator.of(context).pop(value));
             },
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12),
               child: Row(
                 children: [
                   SvgPicture.asset(
-                    'assets/images/gallery.svg',
+                    AppImages.gallery,
                     height: 24,
                     width: 24,
                   ),
-                  const Padding(
-                    padding: EdgeInsets.only(left: 12),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 12),
                     child: Text(
                       'Фотография',
-                      style: TextStyle(
-                        color: Color(0xFF7C7E92),
-                        fontSize: 20,
-                        height: 1.25,
+                      style: AppTextStyle.subtitle.copyWith(
+                        color: AppColor.secondary2,
                       ),
                     ),
                   ),
@@ -76,12 +70,10 @@ class _AddNewPlaceScreenState extends State<AddNewPlaceScreen> {
           onPressed: () {
             Navigator.pop(context);
           },
-          child: const Text(
+          child: Text(
             'ОТМЕНА',
-            style: TextStyle(
-              color: Color(0xFF4CAF50),
-              fontSize: 14,
-              height: 1.25,
+            style: AppTextStyle.button.copyWith(
+              color: AppColor.green,
             ),
           ),
         ),
@@ -89,96 +81,237 @@ class _AddNewPlaceScreenState extends State<AddNewPlaceScreen> {
     );
   }
 
+  final _textLatitudeController = TextEditingController();
+  final _textLongitudeController = TextEditingController();
+  final _textNameController = TextEditingController();
+  final _textDescriptionController = TextEditingController();
+
+  @override
+  void dispose() {
+    _textLatitudeController.dispose();
+    _textNameController.dispose();
+    _textLongitudeController.dispose();
+    _textDescriptionController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return BlocProvider(
       create: (context) => AddNewPlaceBloc()..add(LoadAddNewPlaceEvent()),
-      child: BlocBuilder<AddNewPlaceBloc, AddNewPlaceState>(
+      child: BlocConsumer<AddNewPlaceBloc, AddNewPlaceState>(
+        listener: (context, state) {
+          if (state is AddNewPlaceInitialState) {
+            _textLatitudeController.addListener(() {
+              BlocProvider.of<AddNewPlaceBloc>(context).add(SaveLatitudeForNewPlaceEvent(_textLatitudeController.text));
+            });
+            _textNameController.addListener(() {
+              BlocProvider.of<AddNewPlaceBloc>(context).add(SaveNameForNewPlaceEvent(_textNameController.text));
+            });
+            _textLongitudeController.addListener(() {
+              BlocProvider.of<AddNewPlaceBloc>(context).add(SaveLongitudeForNewPlaceEvent(_textLongitudeController.text));
+            });
+            _textDescriptionController.addListener(() {
+              BlocProvider.of<AddNewPlaceBloc>(context).add(SaveDescriptionForNewPlaceEvent(_textDescriptionController.text));
+            });
+          }
+        },
         builder: (context, state) {
-          if (state is AddNewPlaceLoadingState || state is AddNewPlaceInitialState) {
-            return const CircularProgressIndicatorWidget();
-          } else if (state is AddNewPlaceFailedState) {
-            return const CircularProgressIndicatorWidget();
-          } else if (state is AddNewPlaceSuccessState) {
-            return SafeArea(
-              child: Scaffold(
-                appBar: AppBar(
-                  centerTitle: true,
-                  elevation: 0.0,
-                  backgroundColor: Colors.transparent,
-                  title: const Text(
-                    'Новое место',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
+          switch (state) {
+            case AddNewPlaceLoadingState() || AddNewPlaceInitialState():
+              return const CircularProgressIndicatorWidget();
+            case AddNewPlaceFailedState():
+              return const CircularProgressIndicatorWidget();
+            case AddNewPlaceSuccessState():
+              return SafeArea(
+                child: Scaffold(
+                  appBar: AppBar(
+                    title: Text(
+                      'Новое место',
+                      style: AppTextStyle.subtitle.copyWith(
+                        color: AppColor.main,
+                      ),
                     ),
                   ),
-                ),
-                body: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(height: size.height * .01),
-                        SizedBox(
-                          height: 60,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: state.data.photo.length + 1,
-                            itemBuilder: (BuildContext context, int index) {
-                              {
-                                if (index == 0) {
-                                  return CupertinoPageScaffold(
-                                    child: InkWell(
-                                      onTap: () async {
-                                        final res = await _showActionSheet(context);
-                                        if (res != null && mounted) {
-                                          BlocProvider.of<AddNewPlaceBloc>(context).add(
-                                            AddPhotoForNewPlaceEvent(res),
+                  body: LayoutBuilder(builder: (context, constraints) {
+                    return SingleChildScrollView(
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(
+                          minHeight: constraints.maxHeight,
+                        ),
+                        child: IntrinsicHeight(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.max,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(height: size.height * .01),
+                                SizedBox(
+                                  height: 73,
+                                  child: ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: state.data.photo.length + 1,
+                                    itemBuilder: (BuildContext context, int index) {
+                                      {
+                                        if (index == 0) {
+                                          return CupertinoPageScaffold(
+                                            child: InkWell(
+                                              onTap: () async {
+                                                final res = await _showActionSheet(context);
+                                                if (res != null && mounted) {
+                                                  BlocProvider.of<AddNewPlaceBloc>(context).add(
+                                                    AddPhotoForNewPlaceEvent(res),
+                                                  );
+                                                }
+                                              },
+                                              child: SizedBox(
+                                                height: 72,
+                                                width: 72,
+                                                child: DecoratedBox(
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.transparent,
+                                                    borderRadius: BorderRadius.circular(10),
+                                                    border: Border.all(
+                                                      color: AppColor.green.withOpacity(0.48),
+                                                      width: 2,
+                                                    ),
+                                                  ),
+                                                  child: const Icon(
+                                                    Icons.add,
+                                                    color: AppColor.green,
+                                                    size: 30.0,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        } else {
+                                          return PhotoWidget(
+                                            photo: state.data.photo[index - 1],
+                                            bloc: BlocProvider.of<AddNewPlaceBloc>(context),
+                                            index: index - 1,
                                           );
                                         }
-                                      },
-                                      child: Container(
-                                        padding: const EdgeInsets.all(10),
-                                        decoration: BoxDecoration(
-                                          color: Colors.transparent,
-                                          borderRadius: BorderRadius.circular(10),
-                                          border: Border.all(
-                                            color: const Color(0xFF4CAF50).withOpacity(0.43),
-                                            width: 3,
-                                          ),
-                                        ),
-                                        child: const Icon(
-                                          Icons.add,
-                                          color: Colors.green,
-                                          size: 40.0,
+                                      }
+                                    },
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 24),
+                                  child: Text(
+                                    'категория',
+                                    style: AppTextStyle.superSmall.copyWith(
+                                      color: AppColor.inactiveBlack,
+                                    ),
+                                  ),
+                                ),
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (ctx) => CategoryWidget(
+                                          categoryList: state.data.categoryList,
+                                          bloc: BlocProvider.of<AddNewPlaceBloc>(context),
+                                          index: state.data.index,
                                         ),
                                       ),
+                                    );
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(vertical: 12),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          state.data.index == -1 ? 'Не выбрано' : state.data.category,
+                                          style: AppTextStyle.subtitle.copyWith(
+                                            color: AppColor.secondary2,
+                                          ),
+                                        ),
+                                        SvgPicture.asset(AppImages.view),
+                                      ],
                                     ),
-                                  );
-                                } else {
-                                  return PhotoWidget(
-                                    photo: state.data.photo[index - 1],
-                                    bloc: BlocProvider.of<AddNewPlaceBloc>(context),
-                                    index: index - 1,
-                                  );
-                                }
-                              }
-                            },
+                                  ),
+                                ),
+                                Container(
+                                  height: 0.3,
+                                  width: double.infinity,
+                                  color: AppColor.inactiveBlack,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(bottom: 12, top: 24),
+                                  child: Text(
+                                    'название',
+                                    style: AppTextStyle.superSmall.copyWith(
+                                      color: AppColor.inactiveBlack,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 40,
+                                  child: TextFieldWidget(
+                                    textController: _textNameController,
+                                    screenText: state.data.name,
+                                    color: AppColor.secondary.withOpacity(0.4),
+                                    focusedColor: AppColor.green.withOpacity(0.4),
+                                  ),
+                                ),
+                                const SizedBox(height: 24),
+                                LatitudeAndLongitudeWidget(
+                                  textLatitudeController: _textLatitudeController,
+                                  textLongitudeController: _textLongitudeController,
+                                  longitude: state.data.longitude,
+                                  latitude: state.data.latitude,
+                                ),
+                                const PointToMapWidget(),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                    bottom: 12,
+                                    top: 24,
+                                  ),
+                                  child: Text(
+                                    'описание',
+                                    style: AppTextStyle.superSmall.copyWith(
+                                      color: AppColor.inactiveBlack,
+                                    ),
+                                  ),
+                                ),
+                                TextFieldWidget(
+                                  textController: _textDescriptionController,
+                                  hintText: 'Text',
+                                  minLines: 2,
+                                  maxLines: 4,
+                                  color: AppColor.inactiveBlack,
+                                  focusedColor: AppColor.inactiveBlack,
+                                  screenText: state.data.description,
+                                ),
+                                const Spacer(),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 8),
+                                  child: AppButtonWidget(
+                                    title: 'создать',
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    isEnable: state.data.index != -1 &&
+                                        state.data.latitude.isNotEmpty &&
+                                        state.data.longitude.isNotEmpty &&
+                                        state.data.name.isNotEmpty,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ],
-                    ),
-                  ),
+                      ),
+                    );
+                  }),
                 ),
-              ),
-            );
+              );
           }
-          return const SizedBox();
         },
       ),
     );

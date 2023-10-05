@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:interesting_places/utils/app_color.dart';
 
 class CircularProgressIndicatorWidget extends StatelessWidget {
   const CircularProgressIndicatorWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return const SizedBox(
       width: double.infinity,
-      decoration: const BoxDecoration(
-        color: Colors.white,
-      ),
-      child: const Center(
-        child: CircularProgressIndicator(color: Color(0xFF4CAF50)),
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: AppColor.white,
+        ),
+        child: Center(
+          child: CircularProgressIndicator(color: AppColor.green),
+        ),
       ),
     );
   }
