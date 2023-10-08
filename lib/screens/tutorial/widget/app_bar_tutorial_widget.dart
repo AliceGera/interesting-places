@@ -19,6 +19,8 @@ class AppBarTutorialWidget extends StatelessWidget implements PreferredSizeWidge
     return AppBar(
       title: index != 2
           ? InkWell(
+              splashColor: Colors.transparent,
+              highlightColor: Colors.transparent,
               onTap: () {},
               child: Align(
                 alignment: Alignment.centerRight,
@@ -28,6 +30,8 @@ class AppBarTutorialWidget extends StatelessWidget implements PreferredSizeWidge
                     Padding(
                       padding: const EdgeInsets.fromLTRB(0, 18, 16, 18),
                       child: InkWell(
+                        splashColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
                         onTap: () {
                           Navigator.push(
                             context,

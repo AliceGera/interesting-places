@@ -17,7 +17,7 @@ import 'bloc/add_new_place_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class AddNewPlaceScreen extends StatefulWidget {
-  static const routeName = '/intro';
+  static const routeName = '/addNewPlace';
 
   const AddNewPlaceScreen({Key? key}) : super(key: key);
 
@@ -25,12 +25,9 @@ class AddNewPlaceScreen extends StatefulWidget {
   State<AddNewPlaceScreen> createState() => _AddNewPlaceScreenState();
 }
 
-final ImageRepository repository = ImageRepository();
-
 class _AddNewPlaceScreenState extends State<AddNewPlaceScreen> {
+  final ImageRepository repository = ImageRepository();
   final PageController controller = PageController();
-  var index = 0;
-  Uint8List imageFile = Uint8List(0);
 
   Future<Uint8List?> _showActionSheet(BuildContext context) async {
     return showCupertinoModalPopup<Uint8List?>(
@@ -124,9 +121,12 @@ class _AddNewPlaceScreenState extends State<AddNewPlaceScreen> {
             case AddNewPlaceFailedState():
               return const CircularProgressIndicatorWidget();
             case AddNewPlaceSuccessState():
+              _textLongitudeController.text = state.data.longitude;
+              _textLatitudeController.text = state.data.latitude;
               return SafeArea(
                 child: Scaffold(
                   appBar: AppBar(
+                    automaticallyImplyLeading: false,
                     title: Text(
                       'Новое место',
                       style: AppTextStyle.subtitle.copyWith(
@@ -156,33 +156,31 @@ class _AddNewPlaceScreenState extends State<AddNewPlaceScreen> {
                                     itemBuilder: (BuildContext context, int index) {
                                       {
                                         if (index == 0) {
-                                          return CupertinoPageScaffold(
-                                            child: InkWell(
-                                              onTap: () async {
-                                                final res = await _showActionSheet(context);
-                                                if (res != null && mounted) {
-                                                  BlocProvider.of<AddNewPlaceBloc>(context).add(
-                                                    AddPhotoForNewPlaceEvent(res),
-                                                  );
-                                                }
-                                              },
-                                              child: SizedBox(
-                                                height: 72,
-                                                width: 72,
-                                                child: DecoratedBox(
-                                                  decoration: BoxDecoration(
-                                                    color: Colors.transparent,
-                                                    borderRadius: BorderRadius.circular(10),
-                                                    border: Border.all(
-                                                      color: AppColor.green.withOpacity(0.48),
-                                                      width: 2,
-                                                    ),
+                                          return InkWell(
+                                            onTap: () async {
+                                              final res = await _showActionSheet(context);
+                                              if (res != null && mounted) {
+                                                BlocProvider.of<AddNewPlaceBloc>(context).add(
+                                                  AddPhotoForNewPlaceEvent(res),
+                                                );
+                                              }
+                                            },
+                                            child: SizedBox(
+                                              height: 72,
+                                              width: 72,
+                                              child: DecoratedBox(
+                                                decoration: BoxDecoration(
+                                                  color: Colors.transparent,
+                                                  borderRadius: BorderRadius.circular(10),
+                                                  border: Border.all(
+                                                    color: AppColor.green.withOpacity(0.48),
+                                                    width: 2,
                                                   ),
-                                                  child: const Icon(
-                                                    Icons.add,
-                                                    color: AppColor.green,
-                                                    size: 30.0,
-                                                  ),
+                                                ),
+                                                child: const Icon(
+                                                  Icons.add,
+                                                  color: AppColor.green,
+                                                  size: 30.0,
                                                 ),
                                               ),
                                             ),

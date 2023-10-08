@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:interesting_places/screens/add_new_place/bloc/add_new_place_bloc.dart';
+import 'package:interesting_places/screens/map/map_screen.dart';
 import 'package:interesting_places/utils/app_color.dart';
 import 'package:interesting_places/utils/app_text_style.dart';
-
-import 'custom_map_widget.dart';
+import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 class PointToMapWidget extends StatelessWidget {
   const PointToMapWidget({
@@ -12,13 +14,25 @@ class PointToMapWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        Navigator.push(
+      splashColor: Colors.transparent,
+      highlightColor: Colors.transparent,
+      canRequestFocus: false,
+      onTap: () async {
+        await Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const CustomMap(),
+            builder: (_) => const MapScreen(),
           ),
-        );
+        ).then((value) {
+          if (value is CameraPosition) {
+            BlocProvider.of<AddNewPlaceBloc>(context).add(
+              SaveLatitudeForNewPlaceEvent(value.target.latitude.toString()),
+            );
+            BlocProvider.of<AddNewPlaceBloc>(context).add(
+              SaveLongitudeForNewPlaceEvent(value.target.longitude.toString()),
+            );
+          }
+        });
       },
       child: Padding(
         padding: const EdgeInsets.only(

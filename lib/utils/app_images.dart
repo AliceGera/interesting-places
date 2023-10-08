@@ -8,4 +8,6 @@ class AppImages {
   static const gallery = '${_basePath}gallery.svg';
   static const tick = '${_basePath}tick.svg';
   static const view = '${_basePath}view.svg';
+  static const plus = '${_basePath}plus.svg';
+  static const geo = '${_basePath}geo.svg';
 }
