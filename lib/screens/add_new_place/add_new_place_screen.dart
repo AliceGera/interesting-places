@@ -2,11 +2,13 @@ import 'dart:typed_data';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:interesting_places/database/database.dart';
 import 'package:interesting_places/repository/repository.dart';
 import 'package:interesting_places/screens/add_new_place/widget/category_widget.dart';
 import 'package:interesting_places/screens/add_new_place/widget/latitude_and_longitude_widget.dart';
 import 'package:interesting_places/screens/add_new_place/widget/photo_widget.dart';
 import 'package:interesting_places/screens/add_new_place/widget/point_to_map_widget.dart';
+import 'package:interesting_places/screens/place_list/place_list_screen.dart';
 import 'package:interesting_places/utils/app_color.dart';
 import 'package:interesting_places/utils/app_images.dart';
 import 'package:interesting_places/utils/app_text_style.dart';
@@ -292,7 +294,14 @@ class _AddNewPlaceScreenState extends State<AddNewPlaceScreen> {
                                   child: AppButtonWidget(
                                     title: 'создать',
                                     onPressed: () {
-                                      Navigator.pop(context);
+                                      BlocProvider.of<AddNewPlaceBloc>(context).add(CreateNewPlaceEvent());
+
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) => const PlaceListScreen(),
+                                        ),
+                                      );
                                     },
                                     isEnable: state.data.index != -1 &&
                                         state.data.latitude.isNotEmpty &&

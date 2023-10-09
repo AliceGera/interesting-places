@@ -10,4 +10,12 @@ class AppImages {
   static const view = '${_basePath}view.svg';
   static const plus = '${_basePath}plus.svg';
   static const geo = '${_basePath}geo.svg';
+  static const list_full = '${_basePath}list_full.svg';
+  static const heart = '${_basePath}heart.svg';
+  static const white_heart = '${_basePath}white_heart.svg';
+  static const map = '${_basePath}map.svg';
+  static const settings = '${_basePath}settings.svg';
+  static const settings_green = '${_basePath}settings_green.svg';
+  static const search = '${_basePath}search.svg';
+
 }

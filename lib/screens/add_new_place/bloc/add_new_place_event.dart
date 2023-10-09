@@ -52,3 +52,7 @@ class SaveDescriptionForNewPlaceEvent extends AddNewPlaceEvent {
 
   SaveDescriptionForNewPlaceEvent(this.description);
 }
+class CreateNewPlaceEvent extends AddNewPlaceEvent {
+
+  CreateNewPlaceEvent();
+}
