@@ -15,10 +15,9 @@ class AddNewPlaceBloc extends Bloc<AddNewPlaceEvent, AddNewPlaceState> {
       emit(AddNewPlaceInitialState());
       emit(AddNewPlaceLoadingState());
       try {
-        //await Future.delayed(/*Duration(seconds: 2)*/);
         emit(AddNewPlaceSuccessState(addNewPlaceScreenData));
       } catch (error) {
-        emit(AddNewPlaceFailedState('sss'));
+        emit(AddNewPlaceFailedState(Exception(error)));
       }
     });
 
@@ -31,10 +30,9 @@ class AddNewPlaceBloc extends Bloc<AddNewPlaceEvent, AddNewPlaceState> {
             event.photo,
           ],
         );
-        //await Future.delayed(Duration(seconds: 2));
         emit(AddNewPlaceSuccessState(addNewPlaceScreenData));
       } catch (error) {
-        emit(AddNewPlaceFailedState('sss'));
+        emit(AddNewPlaceFailedState(Exception(error)));
       }
     });
 
@@ -47,7 +45,7 @@ class AddNewPlaceBloc extends Bloc<AddNewPlaceEvent, AddNewPlaceState> {
         );
         emit(AddNewPlaceSuccessState(addNewPlaceScreenData));
       } catch (error) {
-        emit(AddNewPlaceFailedState('sss'));
+        emit(AddNewPlaceFailedState(Exception(error)));
       }
     });
 
@@ -57,10 +55,9 @@ class AddNewPlaceBloc extends Bloc<AddNewPlaceEvent, AddNewPlaceState> {
         addNewPlaceScreenData = addNewPlaceScreenData.copyWith(
           category: event.category,
         );
-        //await Future.delayed(Duration(seconds: 2));
         emit(AddNewPlaceSuccessState(addNewPlaceScreenData));
       } catch (error) {
-        emit(AddNewPlaceFailedState('sss'));
+        emit(AddNewPlaceFailedState(Exception(error)));
       }
     });
     on<SaveIndexForNewPlaceEvent>((event, emit) async {
@@ -69,10 +66,9 @@ class AddNewPlaceBloc extends Bloc<AddNewPlaceEvent, AddNewPlaceState> {
         addNewPlaceScreenData = addNewPlaceScreenData.copyWith(
           index: event.index,
         );
-        //await Future.delayed(Duration(seconds: 2));
         emit(AddNewPlaceSuccessState(addNewPlaceScreenData));
       } catch (error) {
-        emit(AddNewPlaceFailedState('sss'));
+        emit(AddNewPlaceFailedState(Exception(error)));
       }
     });
 
@@ -84,7 +80,7 @@ class AddNewPlaceBloc extends Bloc<AddNewPlaceEvent, AddNewPlaceState> {
         );
         emit(AddNewPlaceSuccessState(addNewPlaceScreenData));
       } catch (error) {
-        emit(AddNewPlaceFailedState('sss'));
+        emit(AddNewPlaceFailedState(Exception(error)));
       }
     });
     on<SaveLongitudeForNewPlaceEvent>((event, emit) async {
@@ -95,7 +91,7 @@ class AddNewPlaceBloc extends Bloc<AddNewPlaceEvent, AddNewPlaceState> {
         );
         emit(AddNewPlaceSuccessState(addNewPlaceScreenData));
       } catch (error) {
-        emit(AddNewPlaceFailedState('sss'));
+        emit(AddNewPlaceFailedState(Exception(error)));
       }
     });
     on<SaveLatitudeForNewPlaceEvent>((event, emit) async {
@@ -106,7 +102,7 @@ class AddNewPlaceBloc extends Bloc<AddNewPlaceEvent, AddNewPlaceState> {
         );
         emit(AddNewPlaceSuccessState(addNewPlaceScreenData));
       } catch (error) {
-        emit(AddNewPlaceFailedState('sss'));
+        emit(AddNewPlaceFailedState(Exception(error)));
       }
     });
     on<SaveDescriptionForNewPlaceEvent>((event, emit) async {
@@ -117,7 +113,7 @@ class AddNewPlaceBloc extends Bloc<AddNewPlaceEvent, AddNewPlaceState> {
         );
         emit(AddNewPlaceSuccessState(addNewPlaceScreenData));
       } catch (error) {
-        emit(AddNewPlaceFailedState('sss'));
+        emit(AddNewPlaceFailedState(Exception(error)));
       }
     });
   }
