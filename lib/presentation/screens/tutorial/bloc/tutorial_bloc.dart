@@ -10,7 +10,7 @@ class TutorialBloc extends Bloc<TutorialEvent, TutorialState> {
     on<LoadTutorialEvent>((event, emit) async {
       emit(TutorialLoadingState());
       try {
-        await Future.delayed(const Duration(seconds: 2));
+        await Future.delayed(const Duration(seconds: 1));
         emit(TutorialSuccessState());
       } catch (error) {
         emit(TutorialFailedState(error.toString()));

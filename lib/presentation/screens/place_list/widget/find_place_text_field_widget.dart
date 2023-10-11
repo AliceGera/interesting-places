@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:interesting_places/presentation/screens/filter/filter_screen.dart';
 import 'package:interesting_places/presentation/utils/app_color.dart';
 import 'package:interesting_places/presentation/utils/app_images.dart';
 
@@ -32,7 +33,12 @@ class FindPlaceTextFieldWidget extends StatelessWidget {
         ),
         suffixIcon: IconButton(
           icon: SvgPicture.asset(AppImages.settings_green),
-          onPressed: () {},
+          onPressed: () {Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => const FilterScreen(),
+            ),
+          );},
         ),
         prefixIcon: IconButton(
           icon: SvgPicture.asset(AppImages.search),
