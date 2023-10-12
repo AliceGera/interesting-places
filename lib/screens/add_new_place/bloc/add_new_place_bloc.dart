@@ -1,5 +1,7 @@
 import 'dart:typed_data';
 import 'package:bloc/bloc.dart';
+import 'package:drift/drift.dart';
+import 'package:interesting_places/database/database.dart';
 import 'package:interesting_places/screens/add_new_place/data/add_new_place_screen_data.dart';
 import 'package:meta/meta.dart';
 
@@ -9,6 +11,7 @@ part 'add_new_place_state.dart';
 
 class AddNewPlaceBloc extends Bloc<AddNewPlaceEvent, AddNewPlaceState> {
   AddNewPlaceScreenData addNewPlaceScreenData = AddNewPlaceScreenData.init();
+  final appDataBase = AppDatabase();
 
   AddNewPlaceBloc() : super(AddNewPlaceInitialState()) {
     on<LoadAddNewPlaceEvent>((event, emit) async {
@@ -114,6 +117,26 @@ class AddNewPlaceBloc extends Bloc<AddNewPlaceEvent, AddNewPlaceState> {
         emit(AddNewPlaceSuccessState(addNewPlaceScreenData));
       } catch (error) {
         emit(AddNewPlaceFailedState(Exception(error)));
+      }
+    });
+
+    on<CreateNewPlaceEvent>((event, emit) async {
+      emit(AddNewPlaceLoadingState());
+      try {
+        appDataBase.into(appDataBase.places).insert(
+              PlacesCompanion.insert(
+                category: addNewPlaceScreenData.category,
+                name: addNewPlaceScreenData.name,
+                description: addNewPlaceScreenData.description,
+                latitude: addNewPlaceScreenData.latitude,
+                longitude: addNewPlaceScreenData.longitude,
+              ),
+            );
+        List<Place> places = await appDataBase.select(appDataBase.places).get();
+        print('items in database: $places');
+        emit(AddNewPlaceSuccessState(addNewPlaceScreenData));
+      } catch (error) {
+        emit(AddNewPlaceFailedState('sss'));
       }
     });
   }
