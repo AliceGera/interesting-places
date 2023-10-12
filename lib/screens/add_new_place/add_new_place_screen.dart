@@ -190,8 +190,9 @@ class _AddNewPlaceScreenState extends State<AddNewPlaceScreen> {
                                         } else {
                                           return PhotoWidget(
                                             photo: state.data.photo[index - 1],
-                                            bloc: BlocProvider.of<AddNewPlaceBloc>(context),
-                                            index: index - 1,
+                                            onPressed: () {
+                                              BlocProvider.of<AddNewPlaceBloc>(context).add(RemovePhotoForNewPlaceEvent(index - 1));
+                                            },
                                           );
                                         }
                                       }

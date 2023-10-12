@@ -20,7 +20,7 @@ class AddNewPlaceBloc extends Bloc<AddNewPlaceEvent, AddNewPlaceState> {
       try {
         emit(AddNewPlaceSuccessState(addNewPlaceScreenData));
       } catch (error) {
-        emit(AddNewPlaceFailedState('sss'));
+        emit(AddNewPlaceFailedState(Exception(error)));
       }
     });
 
@@ -33,10 +33,9 @@ class AddNewPlaceBloc extends Bloc<AddNewPlaceEvent, AddNewPlaceState> {
             event.photo,
           ],
         );
-        //await Future.delayed(Duration(seconds: 2));
         emit(AddNewPlaceSuccessState(addNewPlaceScreenData));
       } catch (error) {
-        emit(AddNewPlaceFailedState('sss'));
+        emit(AddNewPlaceFailedState(Exception(error)));
       }
     });
 
@@ -49,7 +48,7 @@ class AddNewPlaceBloc extends Bloc<AddNewPlaceEvent, AddNewPlaceState> {
         );
         emit(AddNewPlaceSuccessState(addNewPlaceScreenData));
       } catch (error) {
-        emit(AddNewPlaceFailedState('sss'));
+        emit(AddNewPlaceFailedState(Exception(error)));
       }
     });
 
@@ -61,7 +60,7 @@ class AddNewPlaceBloc extends Bloc<AddNewPlaceEvent, AddNewPlaceState> {
         );
         emit(AddNewPlaceSuccessState(addNewPlaceScreenData));
       } catch (error) {
-        emit(AddNewPlaceFailedState('sss'));
+        emit(AddNewPlaceFailedState(Exception(error)));
       }
     });
     on<SaveIndexForNewPlaceEvent>((event, emit) async {
@@ -72,7 +71,7 @@ class AddNewPlaceBloc extends Bloc<AddNewPlaceEvent, AddNewPlaceState> {
         );
         emit(AddNewPlaceSuccessState(addNewPlaceScreenData));
       } catch (error) {
-        emit(AddNewPlaceFailedState('sss'));
+        emit(AddNewPlaceFailedState(Exception(error)));
       }
     });
 
@@ -84,7 +83,7 @@ class AddNewPlaceBloc extends Bloc<AddNewPlaceEvent, AddNewPlaceState> {
         );
         emit(AddNewPlaceSuccessState(addNewPlaceScreenData));
       } catch (error) {
-        emit(AddNewPlaceFailedState('sss'));
+        emit(AddNewPlaceFailedState(Exception(error)));
       }
     });
     on<SaveLongitudeForNewPlaceEvent>((event, emit) async {
@@ -95,7 +94,7 @@ class AddNewPlaceBloc extends Bloc<AddNewPlaceEvent, AddNewPlaceState> {
         );
         emit(AddNewPlaceSuccessState(addNewPlaceScreenData));
       } catch (error) {
-        emit(AddNewPlaceFailedState('sss'));
+        emit(AddNewPlaceFailedState(Exception(error)));
       }
     });
     on<SaveLatitudeForNewPlaceEvent>((event, emit) async {
@@ -106,7 +105,7 @@ class AddNewPlaceBloc extends Bloc<AddNewPlaceEvent, AddNewPlaceState> {
         );
         emit(AddNewPlaceSuccessState(addNewPlaceScreenData));
       } catch (error) {
-        emit(AddNewPlaceFailedState('sss'));
+        emit(AddNewPlaceFailedState(Exception(error)));
       }
     });
     on<SaveDescriptionForNewPlaceEvent>((event, emit) async {
@@ -117,7 +116,7 @@ class AddNewPlaceBloc extends Bloc<AddNewPlaceEvent, AddNewPlaceState> {
         );
         emit(AddNewPlaceSuccessState(addNewPlaceScreenData));
       } catch (error) {
-        emit(AddNewPlaceFailedState('sss'));
+        emit(AddNewPlaceFailedState(Exception(error)));
       }
     });
 
