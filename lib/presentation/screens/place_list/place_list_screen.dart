@@ -48,9 +48,9 @@ class _PlaceListScreenState extends State<PlaceListScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Column(
                       children: [
-                        const Padding(
-                          padding: EdgeInsets.only(bottom: 28),
-                          child: FindPlaceTextFieldWidget(),
+                         Padding(
+                          padding: const EdgeInsets.only(bottom: 28),
+                          child: FindPlaceTextFieldWidget(places:state.data.places),
                         ),
                         Expanded(
                           child: Stack(

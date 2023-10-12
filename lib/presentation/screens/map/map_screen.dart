@@ -115,4 +115,5 @@ class _MapScreenState extends State<MapScreen> {
   Future<void> _clickCallback() async {
     await controller.getCameraPosition().then((value) => Navigator.of(context).pop(value));
   }
+
 }

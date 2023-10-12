@@ -221,7 +221,6 @@ class _AddNewPlaceScreenState extends State<AddNewPlaceScreen> {
                                       context,
                                       MaterialPageRoute(
                                         builder: (ctx) => CategoryWidget(
-                                          categoryList: state.data.categoryList,
                                           bloc: BlocProvider.of<AddNewPlaceBloc>(context),
                                           index: state.data.index,
                                         ),

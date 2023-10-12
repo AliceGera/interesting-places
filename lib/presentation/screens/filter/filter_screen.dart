@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:interesting_places/presentation/enum/enum.dart';
 import 'package:interesting_places/presentation/screens/filter/bloc/filter_bloc.dart';
+import 'package:interesting_places/presentation/screens/filter/widget/app_bar_filter_widget.dart';
 import 'package:interesting_places/presentation/screens/filter/widget/category_table_widget.dart';
+import 'package:interesting_places/presentation/screens/filter/widget/filter_slider_widget.dart';
+import 'package:interesting_places/presentation/screens/place_list/data/place_screen_data.dart';
 import 'package:interesting_places/presentation/utils/app_color.dart';
-import 'package:interesting_places/presentation/utils/app_images.dart';
 import 'package:interesting_places/presentation/utils/app_text_style.dart';
 import 'package:interesting_places/presentation/widget/app_button_widget.dart';
 import 'package:interesting_places/presentation/widget/indicator_widget.dart';
@@ -12,16 +14,20 @@ import 'package:interesting_places/presentation/widget/indicator_widget.dart';
 class FilterScreen extends StatefulWidget {
   static const routeName = '/filter';
 
-  const FilterScreen({Key? key}) : super(key: key);
+  const FilterScreen({
+    Key? key,
+    required this.places,
+  }) : super(key: key);
+  final List<PlaceScreenData> places;
 
   @override
   State<FilterScreen> createState() => _FilterScreenState();
 }
 
 class _FilterScreenState extends State<FilterScreen> {
-  @override
   RangeValues _currentRangeValues = const RangeValues(0, 30);
 
+  @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return BlocProvider(
@@ -37,21 +43,7 @@ class _FilterScreenState extends State<FilterScreen> {
               return SafeArea(
                 child: Scaffold(
                   backgroundColor: AppColor.white,
-                  appBar: AppBar(
-                    automaticallyImplyLeading: false,
-                    title: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        SvgPicture.asset(AppImages.arrow),
-                        Text(
-                          'Очистить',
-                          style: AppTextStyle.subtitle.copyWith(
-                            color: AppColor.green,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  appBar: AppBarFilterWidget(clickCallback: _clickCallback),
                   body: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Column(
@@ -72,19 +64,63 @@ class _FilterScreenState extends State<FilterScreen> {
                               2: FlexColumnWidth(),
                             },
                             defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                            children: const <TableRow>[
+                            children: <TableRow>[
                               TableRow(
                                 children: <Widget>[
-                                  CategoryTableWidget(category: 'category'),
-                                  CategoryTableWidget(category: 'category'),
-                                  CategoryTableWidget(category: 'category'),
+                                  CategoryTableWidget(
+                                    category: CategoryType.hotel,
+                                    callback: () {
+                                      BlocProvider.of<FilterBloc>(context).add(UpdateSelectedCategoriesListEvent(CategoryType.hotel));
+                                    },
+                                    isCheck: state.data.selectedCategories.contains(CategoryType.hotel),
+                                  ),
+                                  CategoryTableWidget(
+                                    category: CategoryType.restaurant,
+                                    callback: () {
+                                      BlocProvider.of<FilterBloc>(context).add(
+                                        UpdateSelectedCategoriesListEvent(
+                                          CategoryType.restaurant,
+                                        ),
+                                      );
+                                    },
+                                    isCheck: state.data.selectedCategories.contains(CategoryType.restaurant),
+                                  ),
+                                  CategoryTableWidget(
+                                    category: CategoryType.particularPlace,
+                                    callback: () {
+                                      BlocProvider.of<FilterBloc>(context).add(
+                                        UpdateSelectedCategoriesListEvent(
+                                          CategoryType.particularPlace,
+                                        ),
+                                      );
+                                    },
+                                    isCheck: state.data.selectedCategories.contains(CategoryType.particularPlace),
+                                  ),
                                 ],
                               ),
                               TableRow(
                                 children: <Widget>[
-                                  CategoryTableWidget(category: 'category'),
-                                  CategoryTableWidget(category: 'category'),
-                                  CategoryTableWidget(category: 'category'),
+                                  CategoryTableWidget(
+                                    category: CategoryType.park,
+                                    callback: () {
+                                      BlocProvider.of<FilterBloc>(context).add(UpdateSelectedCategoriesListEvent(CategoryType.park));
+                                    },
+                                    isCheck: state.data.selectedCategories.contains(CategoryType.park),
+                                  ),
+                                  CategoryTableWidget(
+                                    category: CategoryType.museum,
+                                    callback: () {
+                                      BlocProvider.of<FilterBloc>(context).add(UpdateSelectedCategoriesListEvent(CategoryType.museum));
+                                    },
+                                    isCheck: state.data.selectedCategories.contains(CategoryType.museum),
+                                  ),
+                                  CategoryTableWidget(
+                                    category: CategoryType.cafe,
+                                    callback: () {
+                                      BlocProvider.of<FilterBloc>(context).add(UpdateSelectedCategoriesListEvent(CategoryType.cafe));
+                                    },
+                                    isCheck: state.data.selectedCategories.contains(CategoryType.cafe),
+                                  ),
                                 ],
                               ),
                             ],
@@ -108,35 +144,15 @@ class _FilterScreenState extends State<FilterScreen> {
                         ),
                         Padding(
                           padding: const EdgeInsets.only(top: 32),
-                          child: SliderTheme(
-                            data: SliderTheme.of(context).copyWith(
-                              trackHeight: 1.0,
-                              thumbColor: Colors.white,
-                              overlayColor: AppColor.inactiveBlack,
-                              overlayShape: const RoundSliderThumbShape(disabledThumbRadius: 1.0),
-                              inactiveTrackColor: AppColor.inactiveBlack,
-                              activeTrackColor: AppColor.green,
-                            ),
-                            child: RangeSlider(
-                              min: 0,
-                              values: _currentRangeValues,
-                              max: 30,
-                              labels: RangeLabels(
-                                _currentRangeValues.start.round().toString(),
-                                _currentRangeValues.end.round().toString(),
-                              ),
-                              onChanged: (RangeValues values) {
-                                setState(() {
-                                  _currentRangeValues = values;
-                                });
-                              },
-                            ),
+                          child: FilterSliderWidget(
+                            currentRangeValues: _currentRangeValues,
+                            callbackCurrentRangeValues: _callbackCurrentRangeValues,
                           ),
                         ),
                         const Spacer(),
-                        const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 8.0),
-                          child: AppButtonWidget(title: 'показать (190)'),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: AppButtonWidget(title: 'показать ${numberPlaces(widget.places, state.data.selectedCategories)}'),
                         ),
                       ],
                     ),
@@ -147,5 +163,34 @@ class _FilterScreenState extends State<FilterScreen> {
         },
       ),
     );
+  }
+
+  int numberPlaces(
+    List<PlaceScreenData> places,
+    List<CategoryType> selectedCategories,
+  ) {
+    return places
+        .where(
+          (e) => selectedCategories
+              .where(
+                (element) => element.getCategoryTypeTitle() == e.category && e.distance > _currentRangeValues.start && e.distance < _currentRangeValues.end,
+              )
+              .toList()
+              .isNotEmpty,
+        )
+        .toList()
+        .length;
+  }
+
+  _clickCallback() {
+    BlocProvider.of<FilterBloc>(context).add(
+      CleanSelectedCategoriesListEvent(),
+    );
+  }
+
+  void _callbackCurrentRangeValues(RangeValues values) {
+    setState(() {
+      _currentRangeValues = values;
+    });
   }
 }

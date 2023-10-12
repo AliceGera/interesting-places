@@ -15,7 +15,7 @@ class BottomNavigationBarWidget extends StatelessWidget {
       backgroundColor: AppColor.white,
       items: <BottomNavigationBarItem>[
         BottomNavigationBarItem(
-          icon: SvgPicture.asset(AppImages.list_full),
+          icon: SvgPicture.asset(AppImages.listFull),
           label: '',
         ),
         BottomNavigationBarItem(

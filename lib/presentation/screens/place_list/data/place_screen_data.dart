@@ -7,6 +7,7 @@ class PlaceScreenData {
   final String latitude;
   final String longitude;
   final String description;
+  final double distance;
 
   PlaceScreenData(
     this.photo,
@@ -15,6 +16,7 @@ class PlaceScreenData {
     this.latitude,
     this.longitude,
     this.description,
+    this.distance,
   );
 
   static PlaceScreenData init() => PlaceScreenData(
@@ -24,6 +26,7 @@ class PlaceScreenData {
         '',
         '',
         '',
+        0,
       );
 
   PlaceScreenData copyWith({
@@ -33,6 +36,7 @@ class PlaceScreenData {
     String? latitude,
     String? longitude,
     String? description,
+    double? distance,
   }) =>
       PlaceScreenData(
         photo ?? this.photo,
@@ -41,5 +45,6 @@ class PlaceScreenData {
         latitude ?? this.latitude,
         longitude ?? this.longitude,
         description ?? this.description,
+        distance ?? this.distance,
       );
 }
