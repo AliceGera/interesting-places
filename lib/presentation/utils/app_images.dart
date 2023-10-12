@@ -25,4 +25,10 @@ class AppImages {
   static const museum = '${_basePath}museum.svg';
   static const cafe = '${_basePath}cafe.svg';
   static const tickChoice = '${_basePath}tickChoice.svg';
+  static const test = '${_basePath}test.png';
+  static const whiteBackArrow = '${_basePath}whiteBackArrow.svg';
+  static const go = '${_basePath}go.svg';
+  static const calendar = '${_basePath}calendar.svg';
+  static const heartFull = '${_basePath}heartFull.svg';
+
 }

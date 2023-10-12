@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:interesting_places/presentation/screens/add_new_place/add_new_place_screen.dart';
+import 'package:interesting_places/presentation/screens/place_list/place_list_screen.dart';
 import 'package:interesting_places/presentation/screens/tutorial/bloc/tutorial_bloc.dart';
 import 'package:interesting_places/presentation/screens/tutorial/widget/app_bar_tutorial_widget.dart';
 import 'package:interesting_places/presentation/screens/tutorial/widget/main_widget.dart';
@@ -93,7 +93,12 @@ class _TutorialScreenState extends State<TutorialScreen> {
                           AppButtonWidget(
                             title: 'на старт',
                             onPressed: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => const AddNewPlaceScreen() /*PlaceListScreen()*/));
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const /*AddNewPlaceScreen() */ PlaceListScreen(),
+                                ),
+                              );
                             },
                           ),
                           SizedBox(height: size.height * 0.01),

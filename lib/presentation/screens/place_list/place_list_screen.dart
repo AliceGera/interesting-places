@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:interesting_places/presentation/screens/info_card/info_card_screen.dart';
 import 'package:interesting_places/presentation/screens/place_list/widget/add_new_place_button_widget.dart';
 import 'package:interesting_places/presentation/screens/place_list/widget/find_place_text_field_widget.dart';
 import 'package:interesting_places/presentation/screens/place_list/widget/place_widget.dart';
@@ -48,9 +49,9 @@ class _PlaceListScreenState extends State<PlaceListScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Column(
                       children: [
-                         Padding(
+                        Padding(
                           padding: const EdgeInsets.only(bottom: 28),
-                          child: FindPlaceTextFieldWidget(places:state.data.places),
+                          child: FindPlaceTextFieldWidget(places: state.data.places),
                         ),
                         Expanded(
                           child: Stack(
@@ -61,7 +62,19 @@ class _PlaceListScreenState extends State<PlaceListScreen> {
                                 itemCount: state.data.places.length,
                                 itemBuilder: (BuildContext context, int index) => SizedBox(
                                   height: size.height * 0.25,
-                                  child: PlaceWidget(places: state.data.places[index]),
+                                  child: InkWell(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) =>  InfoCardScreen(place:state.data.places[index]),
+                                        ),
+                                      );
+                                    },
+                                    child: PlaceWidget(
+                                      places: state.data.places[index],
+                                    ),
+                                  ),
                                 ),
                                 separatorBuilder: (BuildContext context, int index) => Container(height: 12),
                               ),
