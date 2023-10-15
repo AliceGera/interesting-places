@@ -7,13 +7,12 @@ class PhotoWidget extends StatelessWidget {
   const PhotoWidget({
     super.key,
     required this.photo,
-    required this.bloc,
-    required this.index,
+    required this.onPressed,
   });
 
-  final AddNewPlaceBloc bloc;
   final Uint8List photo;
-  final int index;
+
+  final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -34,9 +33,7 @@ class PhotoWidget extends StatelessWidget {
             ),
           ),
           InkWell(
-            onTap: () {
-              bloc.add(RemovePhotoForNewPlaceEvent(index));
-            },
+            onTap: onPressed,
             child: SvgPicture.asset(AppImages.clear),
           ),
         ],
