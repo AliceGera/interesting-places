@@ -7,6 +7,7 @@ class AddNewPlaceData {
   final String? latitude;
   final String? longitude;
   final String? description;
+  final int? id;
 
   AddNewPlaceData({
     this.photo,
@@ -14,6 +15,7 @@ class AddNewPlaceData {
     this.name,
     this.latitude,
     this.longitude,
+    this.id,
     this.description,
   });
 }

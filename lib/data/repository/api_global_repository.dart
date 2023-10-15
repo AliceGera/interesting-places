@@ -10,19 +10,28 @@ class ApiPlacesRepository implements IPlacesRepository {
 
   @override
   Future<PlaceListData> getPlaceList() async {
-    final some = await appDatabase.select(appDatabase.placesView).get();
-    final list = some
-        .map(
-          (e) => PlaceData(
-            description: e.description,
-            name: e.name,
-            longitude: e.longitude,
-            latitude: e.latitude,
-            category: e.category,
-            photo: [e.data],
-          ),
-        )
-        .toList();
+    final placeList = await appDatabase.select(appDatabase.places).get();
+    final imageList = await appDatabase.select(appDatabase.images).get();
+    final list = placeList.map((e) {
+      final photoList = imageList
+          .where(
+            (element) => element.placeId == e.id,
+          )
+          .map(
+            (e) => e.data,
+          )
+          .toList();
+      final placeData = PlaceData(
+        description: e.description,
+        name: e.name,
+        longitude: e.longitude,
+        latitude: e.latitude,
+        category: e.category,
+        photo: photoList,
+      );
+      return placeData;
+    }).toList();
+
     return PlaceListData(places: list);
   }
 

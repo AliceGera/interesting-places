@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:interesting_places/presentation/utils/app_color.dart';
 import 'package:interesting_places/presentation/utils/app_text_style.dart';
 
@@ -7,6 +8,7 @@ class AppButtonWidget extends StatelessWidget {
   final bool isEnable;
   final VoidCallback? onPressed;
   final int? index;
+  final String? image;
 
   const AppButtonWidget({
     Key? key,
@@ -14,6 +16,7 @@ class AppButtonWidget extends StatelessWidget {
     this.isEnable = true,
     this.onPressed,
     this.index,
+    this.image,
   }) : super(key: key);
 
   @override
@@ -38,11 +41,17 @@ class AppButtonWidget extends StatelessWidget {
             vertical: 15,
             horizontal: 16,
           ),
-          child: Text(
-            title.toUpperCase(),
-            style: AppTextStyle.button.copyWith(
-              color: isEnable ? AppColor.white : AppColor.inactiveBlack,
-            ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SvgPicture.asset(image ?? ''),
+              Text(
+                title.toUpperCase(),
+                style: AppTextStyle.button.copyWith(
+                  color: isEnable ? AppColor.white : AppColor.inactiveBlack,
+                ),
+              ),
+            ],
           ),
         ),
       ),
