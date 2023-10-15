@@ -19,6 +19,7 @@ class FilterSliderWidget extends StatefulWidget {
 }
 
 class _FilterSliderWidgetState extends State<FilterSliderWidget> {
+
   @override
   Widget build(BuildContext context) {
     return SliderTheme(

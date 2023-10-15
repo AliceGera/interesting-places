@@ -4,7 +4,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:interesting_places/presentation/utils/app_images.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
 import 'app_bar_map_widget.dart';
-
 class MapScreen extends StatefulWidget {
   static const routeName = '/map';
 
@@ -115,5 +114,4 @@ class _MapScreenState extends State<MapScreen> {
   Future<void> _clickCallback() async {
     await controller.getCameraPosition().then((value) => Navigator.of(context).pop(value));
   }
-
 }

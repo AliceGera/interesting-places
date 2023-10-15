@@ -30,5 +30,11 @@ class AppImages {
   static const go = '${_basePath}go.svg';
   static const calendar = '${_basePath}calendar.svg';
   static const heartFull = '${_basePath}heartFull.svg';
+  static const refresh = '${_basePath}refresh.svg';
+  static const mapFull = '${_basePath}mapFull.svg';
+  static const list = '${_basePath}list.svg';
+  static const currentPosition = '${_basePath}currentPosition.png';
+  static const position = '${_basePath}position.png';
+
 
 }

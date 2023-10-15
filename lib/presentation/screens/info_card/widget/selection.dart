@@ -7,15 +7,16 @@ import 'package:interesting_places/presentation/utils/app_text_style.dart';
 class SelectionWidget extends StatelessWidget {
   final String selectionPlan;
   final String selectionFavorites;
-  SelectionWidget({
+
+  const SelectionWidget({
     Key? key,
     required this.selectionPlan,
-    required this.selectionFavorites
+    required this.selectionFavorites,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return  Row(
+    return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         Row(

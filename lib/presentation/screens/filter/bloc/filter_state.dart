@@ -8,7 +8,8 @@ class FilterInitialState implements FilterState {}
 class FilterLoadingState implements FilterState {}
 
 class FilterSuccessState implements FilterState {
-  late FilterScreenData data;
+  final FilterScreenData data;
+
   FilterSuccessState(this.data);
 }
 

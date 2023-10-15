@@ -3,8 +3,8 @@ import 'package:interesting_places/domain/model/place_list_data.dart';
 import 'package:interesting_places/presentation/screens/place_list/data/place_list_screen_data.dart';
 import 'package:interesting_places/presentation/screens/place_list/data/place_screen_data.dart';
 
-abstract class PlaceListViewMapper {
-  factory PlaceListViewMapper() => _PlaceListViewMapper();
+abstract class PlaceMapViewMapper {
+  factory PlaceMapViewMapper() => _PlaceMapViewMapper();
 
   PlaceListScreenData toScreenData(
     PlaceListScreenData screenData,
@@ -13,7 +13,7 @@ abstract class PlaceListViewMapper {
   );
 }
 
-class _PlaceListViewMapper implements PlaceListViewMapper {
+class _PlaceMapViewMapper implements PlaceMapViewMapper {
   @override
   PlaceListScreenData toScreenData(
     PlaceListScreenData screenData,

@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:interesting_places/presentation/screens/add_new_place/add_new_place_screen.dart';
 import 'package:interesting_places/presentation/utils/app_color.dart';
 import 'package:interesting_places/presentation/utils/app_images.dart';
 import 'package:interesting_places/presentation/utils/app_text_style.dart';
 
 class AddNewPlaceButtonWidget extends StatelessWidget {
   const AddNewPlaceButtonWidget({
+     required this.onPressed,
     Key? key,
   }) : super(key: key);
-
+  final VoidCallback onPressed;
   @override
   Widget build(BuildContext context) {
     return DecoratedBox(
@@ -29,12 +29,7 @@ class AddNewPlaceButtonWidget extends StatelessWidget {
           disabledBackgroundColor: Colors.transparent.withOpacity(0.12),
           shadowColor: Colors.transparent,
         ),
-        onPressed: () {Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => const AddNewPlaceScreen(),
-          ),
-        );},
+        onPressed: onPressed,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 15),
           child: Row(

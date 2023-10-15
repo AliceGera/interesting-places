@@ -9,7 +9,6 @@ import 'package:interesting_places/presentation/screens/add_new_place/widget/lat
 import 'package:interesting_places/presentation/screens/add_new_place/widget/photo_widget.dart';
 import 'package:interesting_places/presentation/screens/add_new_place/widget/point_to_map_widget.dart';
 import 'package:interesting_places/presentation/screens/add_new_place/widget/text_field_widget.dart';
-import 'package:interesting_places/presentation/screens/place_list/place_list_screen.dart';
 import 'package:interesting_places/presentation/utils/app_color.dart';
 import 'package:interesting_places/presentation/utils/app_images.dart';
 import 'package:interesting_places/presentation/utils/app_text_style.dart';
@@ -20,8 +19,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class AddNewPlaceScreen extends StatefulWidget {
   static const routeName = '/add_new_place';
-
-  const AddNewPlaceScreen({Key? key}) : super(key: key);
+   final VoidCallback? clickCallback;
+  const AddNewPlaceScreen({Key? key,  this.clickCallback} ) : super(key: key);
 
   @override
   State<AddNewPlaceScreen> createState() => _AddNewPlaceScreenState();
@@ -115,14 +114,9 @@ class _AddNewPlaceScreenState extends State<AddNewPlaceScreen> {
               BlocProvider.of<AddNewPlaceBloc>(context).add(SaveDescriptionForNewPlaceEvent(_textDescriptionController.text));
             });
           } else if (state is AddNewPlaceFinishState) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => const PlaceListScreen(),
-              ),
-            );
+            widget.clickCallback?.call();
+            Navigator.pop(context);
           }
-          ;
         },
         builder: (context, state) {
           switch (state) {
