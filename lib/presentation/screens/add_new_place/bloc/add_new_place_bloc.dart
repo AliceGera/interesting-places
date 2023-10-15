@@ -87,7 +87,7 @@ class AddNewPlaceBloc extends Bloc<AddNewPlaceEvent, AddNewPlaceState> {
         await interactor.putPlaceToDatabase(data);
         emit(AddNewPlaceFinishState());
       } catch (error) {
-        emit(AddNewPlaceFailedState(error.toString()));
+        emit(AddNewPlaceFailedState(Exception(error)));
       }
     });
   }

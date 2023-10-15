@@ -14,7 +14,7 @@ class AddNewPlaceSuccessState implements AddNewPlaceState {
 }
 
 class AddNewPlaceFailedState implements AddNewPlaceState {
-  final dynamic error;
+  final Exception error;
 
   AddNewPlaceFailedState(this.error);
 }
