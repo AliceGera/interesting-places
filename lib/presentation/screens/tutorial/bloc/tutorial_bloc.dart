@@ -13,7 +13,7 @@ class TutorialBloc extends Bloc<TutorialEvent, TutorialState> {
         await Future.delayed(const Duration(seconds: 1));
         emit(TutorialSuccessState());
       } catch (error) {
-        emit(TutorialFailedState(error.toString()));
+        emit(TutorialFailedState(Exception(error)));
       }
     });
   }
