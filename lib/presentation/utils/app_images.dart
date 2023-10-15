@@ -16,6 +16,9 @@ class AppImages {
   static const map = '${_basePath}map.svg';
   static const settings = '${_basePath}settings.svg';
   static const settings_green = '${_basePath}settings_green.svg';
+  static const arrow = '${_basePath}arrow.svg';
   static const search = '${_basePath}search.svg';
+  static const hotel = '${_basePath}hotel.svg';
+
 
 }

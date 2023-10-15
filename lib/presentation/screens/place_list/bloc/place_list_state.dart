@@ -3,7 +3,7 @@ part of 'place_list_bloc.dart';
 @immutable
 sealed class PlaceListState {}
 
-class PlaceListInitialState extends PlaceListState {}
+class PlaceListInitialState implements PlaceListState {}
 
 class PlaceListLoadingState implements PlaceListState {}
 
