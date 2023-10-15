@@ -48,7 +48,7 @@ class PlaceWidget extends StatelessWidget {
                         color: AppColor.white,
                       ),
                     ),
-                    SvgPicture.asset(AppImages.white_heart),
+                    SvgPicture.asset(AppImages.whiteHeart),
                   ],
                 ),
               ),

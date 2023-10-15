@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:interesting_places/presentation/enum/enum.dart';
 import 'package:interesting_places/presentation/screens/add_new_place/bloc/add_new_place_bloc.dart';
 import 'package:interesting_places/presentation/utils/app_color.dart';
 import 'package:interesting_places/presentation/utils/app_images.dart';
 import 'package:interesting_places/presentation/utils/app_text_style.dart';
 import 'package:interesting_places/presentation/widget/app_button_widget.dart';
+
 class CategoryWidget extends StatefulWidget {
   const CategoryWidget({
     super.key,
-    required this.categoryList,
     required this.bloc,
     required this.index,
   });
 
-  final List<String> categoryList;
   final AddNewPlaceBloc bloc;
   final int index;
 
@@ -62,7 +62,7 @@ class _CategoryWidgetState extends State<CategoryWidget> {
                 child: ListView.builder(
                   shrinkWrap: true,
                   padding: const EdgeInsets.all(8),
-                  itemCount: widget.categoryList.length,
+                  itemCount: CategoryType.values.length,
                   itemBuilder: (BuildContext context, int i) {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -81,7 +81,7 @@ class _CategoryWidgetState extends State<CategoryWidget> {
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    widget.categoryList[i],
+                                    CategoryType.values[i].getCategoryTypeTitle(),
                                     style: AppTextStyle.subtitle.copyWith(
                                       color: AppColor.main,
                                     ),
@@ -108,7 +108,7 @@ class _CategoryWidgetState extends State<CategoryWidget> {
                   title: 'сохранить',
                   index: index,
                   onPressed: () {
-                    widget.bloc.add(AddCategoryForNewPlaceEvent(widget.categoryList[index]));
+                    widget.bloc.add(AddCategoryForNewPlaceEvent(CategoryType.values[index].getCategoryTypeTitle()));
                     widget.bloc.add(SaveIndexForNewPlaceEvent(index));
                     Navigator.pop(context);
                   },

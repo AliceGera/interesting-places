@@ -93,7 +93,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
                           AppButtonWidget(
                             title: 'на старт',
                             onPressed: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => const AddNewPlaceScreen()));
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => const AddNewPlaceScreen() /*PlaceListScreen()*/));
                             },
                           ),
                           SizedBox(height: size.height * 0.01),

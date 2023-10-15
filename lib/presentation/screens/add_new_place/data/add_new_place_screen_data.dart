@@ -2,7 +2,6 @@ import 'dart:typed_data';
 
 class AddNewPlaceScreenData {
   final List<Uint8List> photo;
-  final List<String> categoryList;
   final String category;
   final int index;
   final String name;
@@ -12,7 +11,6 @@ class AddNewPlaceScreenData {
 
   AddNewPlaceScreenData(
     this.photo,
-    this.categoryList,
     this.category,
     this.index,
     this.name,
@@ -23,14 +21,6 @@ class AddNewPlaceScreenData {
 
   static AddNewPlaceScreenData init() => AddNewPlaceScreenData(
         [],
-        [
-          'Кинотеатр',
-          'Ресторан',
-          'Особое место',
-          'Театр',
-          'Музей',
-          'Кафе',
-        ],
         '',
         -1,
         '',
@@ -41,7 +31,6 @@ class AddNewPlaceScreenData {
 
   AddNewPlaceScreenData copyWith({
     List<Uint8List>? photo,
-    List<String>? categoryList,
     String? category,
     int? index,
     String? name,
@@ -51,7 +40,6 @@ class AddNewPlaceScreenData {
   }) =>
       AddNewPlaceScreenData(
         photo ?? this.photo,
-        categoryList ?? this.categoryList,
         category ?? this.category,
         index ?? this.index,
         name ?? this.name,
