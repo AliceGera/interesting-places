@@ -1,7 +1,8 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
 import 'package:interesting_places/presentation/enum/enum.dart';
 import 'package:interesting_places/presentation/screens/filter/data/filter_screen_data.dart';
-import 'package:meta/meta.dart';
+import 'package:interesting_places/presentation/screens/place_list/data/place_screen_data.dart';
 
 part 'filter_event.dart';
 
@@ -12,18 +13,32 @@ class FilterBloc extends Bloc<FilterEvent, FilterState> {
 
   FilterBloc() : super(FilterInitialState()) {
     on<LoadFilterEvent>((event, emit) async {
-      emit(FilterLoadingState());
-      try {
-        emit(FilterSuccessState(filterScreenData));
-      } catch (error) {
-        emit(FilterFailedState(error.toString()));
-      }
+      final selectedList = event.places
+          .where(
+            (e) => event.selectedCategories
+                .where(
+                  (element) => element.getCategoryTypeTitle() == e.category && e.distance > event.rangeValues.start && e.distance < event.rangeValues.end,
+                )
+                .toList()
+                .isNotEmpty,
+          )
+          .toList();
+
+      filterScreenData = filterScreenData.copyWith(
+        places: event.places,
+        selectedCategories: event.selectedCategories,
+        rangeValues: event.rangeValues,
+        sortedPlaces: selectedList,
+      );
+      emit(FilterSuccessState(filterScreenData));
     });
     on<UpdateSelectedCategoriesListEvent>((event, emit) {
       if (filterScreenData.selectedCategories.contains(event.category)) {
-        filterScreenData.selectedCategories.remove(event.category);
+        var newSelectedCategories = List<CategoryType>.from(
+          filterScreenData.selectedCategories,
+        )..remove(event.category);
         filterScreenData = filterScreenData.copyWith(
-          selectedCategories: filterScreenData.selectedCategories,
+          selectedCategories: newSelectedCategories,
         );
       } else {
         filterScreenData = filterScreenData.copyWith(
@@ -33,6 +48,45 @@ class FilterBloc extends Bloc<FilterEvent, FilterState> {
           ],
         );
       }
+      final sortedPlaces = filterScreenData.places
+          .where(
+            (e) => filterScreenData.selectedCategories
+                .where(
+                  (element) =>
+                      element.getCategoryTypeTitle() == e.category &&
+                      e.distance > filterScreenData.rangeValues.start &&
+                      e.distance < filterScreenData.rangeValues.end,
+                )
+                .toList()
+                .isNotEmpty,
+          )
+          .toList();
+      filterScreenData = filterScreenData.copyWith(
+        sortedPlaces: sortedPlaces,
+      );
+      emit(FilterSuccessState(filterScreenData));
+    });
+
+    on<ChangeCurrentRangeValuesEvent>((event, emit) {
+      filterScreenData = filterScreenData.copyWith(
+        rangeValues: event.rangeValues,
+      );
+      final sortedPlaces = filterScreenData.places
+          .where(
+            (e) => filterScreenData.selectedCategories
+                .where(
+                  (element) =>
+                      element.getCategoryTypeTitle() == e.category &&
+                      e.distance > filterScreenData.rangeValues.start &&
+                      e.distance < filterScreenData.rangeValues.end,
+                )
+                .toList()
+                .isNotEmpty,
+          )
+          .toList();
+      filterScreenData = filterScreenData.copyWith(
+        sortedPlaces: sortedPlaces,
+      );
       emit(FilterSuccessState(filterScreenData));
     });
     on<CleanSelectedCategoriesListEvent>((event, emit) {

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:interesting_places/presentation/screens/add_new_place/add_new_place_screen.dart';
 import 'package:interesting_places/presentation/screens/info_card/info_card_screen.dart';
 import 'package:interesting_places/presentation/screens/place_list/widget/add_new_place_button_widget.dart';
 import 'package:interesting_places/presentation/screens/place_list/widget/find_place_text_field_widget.dart';
 import 'package:interesting_places/presentation/screens/place_list/widget/place_widget.dart';
 import 'package:interesting_places/presentation/utils/app_color.dart';
 import 'package:interesting_places/presentation/utils/app_text_style.dart';
-import 'package:interesting_places/presentation/widget/bottom_navigation_bar.dart';
 import 'package:interesting_places/presentation/widget/indicator_widget.dart';
 import 'bloc/place_list_bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -51,7 +51,21 @@ class _PlaceListScreenState extends State<PlaceListScreen> {
                       children: [
                         Padding(
                           padding: const EdgeInsets.only(bottom: 28),
-                          child: FindPlaceTextFieldWidget(places: state.data.places),
+                          child: FindPlaceTextFieldWidget(
+                              data: state.data,
+                              callback: (
+                                selectedCategories,
+                                rangeValues,
+                                sortedPlaces,
+                              ) {
+                                BlocProvider.of<PlaceListBloc>(context).add(
+                                  ChanceValuesPlaceListEvent(
+                                    sortedPlaces,
+                                    rangeValues,
+                                    selectedCategories,
+                                  ),
+                                );
+                              }),
                         ),
                         Expanded(
                           child: Stack(
@@ -59,7 +73,7 @@ class _PlaceListScreenState extends State<PlaceListScreen> {
                             children: [
                               ListView.separated(
                                 scrollDirection: Axis.vertical,
-                                itemCount: state.data.places.length,
+                                itemCount: state.data.sortedPlaces.length,
                                 itemBuilder: (BuildContext context, int index) => SizedBox(
                                   height: size.height * 0.25,
                                   child: InkWell(
@@ -67,20 +81,35 @@ class _PlaceListScreenState extends State<PlaceListScreen> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (_) =>  InfoCardScreen(place:state.data.places[index]),
+                                          builder: (_) => InfoCardScreen(place: state.data.sortedPlaces[index]),
                                         ),
                                       );
                                     },
                                     child: PlaceWidget(
-                                      places: state.data.places[index],
+                                      places: state.data.sortedPlaces[index],
                                     ),
                                   ),
                                 ),
                                 separatorBuilder: (BuildContext context, int index) => Container(height: 12),
                               ),
-                              const Padding(
-                                padding: EdgeInsets.only(bottom: 16),
-                                child: AddNewPlaceButtonWidget(),
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 16),
+                                child: AddNewPlaceButtonWidget(
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) => AddNewPlaceScreen(
+                                          clickCallback: () {
+                                            BlocProvider.of<PlaceListBloc>(context).add(
+                                              UpdatePlaceListEvent(),
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
                               ),
                             ],
                           ),
@@ -88,7 +117,6 @@ class _PlaceListScreenState extends State<PlaceListScreen> {
                       ],
                     ),
                   ),
-                  bottomNavigationBar: const BottomNavigationBarWidget(),
                 ),
               );
           }

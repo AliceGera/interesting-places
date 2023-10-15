@@ -17,21 +17,35 @@ class FilterScreen extends StatefulWidget {
   const FilterScreen({
     Key? key,
     required this.places,
+    required this.selectedCategories,
+    required this.rangeValues,
+    required this.callback,
   }) : super(key: key);
+  final void Function(
+    List<CategoryType> selectedCategories,
+    RangeValues rangeValues,
+    List<PlaceScreenData> sortedPlaces,
+  ) callback;
   final List<PlaceScreenData> places;
+  final List<CategoryType> selectedCategories;
+  final RangeValues rangeValues;
 
   @override
   State<FilterScreen> createState() => _FilterScreenState();
 }
 
 class _FilterScreenState extends State<FilterScreen> {
-  RangeValues _currentRangeValues = const RangeValues(0, 30);
-
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return BlocProvider(
-      create: (context) => FilterBloc()..add(LoadFilterEvent()),
+      create: (context) => FilterBloc()
+        ..add(LoadFilterEvent(
+          widget.selectedCategories,
+          widget.rangeValues,
+          widget.places,
+          // widget.sortedPlaces,
+        )),
       child: BlocBuilder<FilterBloc, FilterState>(
         builder: (context, state) {
           switch (state) {
@@ -43,7 +57,13 @@ class _FilterScreenState extends State<FilterScreen> {
               return SafeArea(
                 child: Scaffold(
                   backgroundColor: AppColor.white,
-                  appBar: AppBarFilterWidget(clickCallback: _clickCallback),
+                  appBar: AppBarFilterWidget(
+                    clickCallback: () {
+                      BlocProvider.of<FilterBloc>(context).add(
+                        CleanSelectedCategoriesListEvent(),
+                      );
+                    },
+                  ),
                   body: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Column(
@@ -135,7 +155,7 @@ class _FilterScreenState extends State<FilterScreen> {
                               style: AppTextStyle.subtitleLite,
                             ),
                             Text(
-                              'от ${_currentRangeValues.start.round().toString()} до ${_currentRangeValues.end.round().toString()} км',
+                              'от ${state.data.rangeValues.start.round().toString()} до ${state.data.rangeValues.end.round().toString()} км',
                               style: AppTextStyle.subtitleLite.copyWith(
                                 color: AppColor.secondary2,
                               ),
@@ -145,14 +165,28 @@ class _FilterScreenState extends State<FilterScreen> {
                         Padding(
                           padding: const EdgeInsets.only(top: 32),
                           child: FilterSliderWidget(
-                            currentRangeValues: _currentRangeValues,
-                            callbackCurrentRangeValues: _callbackCurrentRangeValues,
+                            currentRangeValues: state.data.rangeValues,
+                            callbackCurrentRangeValues: (RangeValues values) {
+                              BlocProvider.of<FilterBloc>(context).add(
+                                ChangeCurrentRangeValuesEvent(values),
+                              );
+                            },
                           ),
                         ),
                         const Spacer(),
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 8.0),
-                          child: AppButtonWidget(title: 'показать ${numberPlaces(widget.places, state.data.selectedCategories)}'),
+                          child: AppButtonWidget(
+                            title: 'показать ${state.data.sortedPlaces.length}',
+                            onPressed: () {
+                              widget.callback.call(
+                                state.data.selectedCategories,
+                                state.data.rangeValues,
+                                state.data.sortedPlaces,
+                              );
+                              Navigator.pop(context);
+                            },
+                          ),
                         ),
                       ],
                     ),
@@ -163,34 +197,5 @@ class _FilterScreenState extends State<FilterScreen> {
         },
       ),
     );
-  }
-
-  int numberPlaces(
-    List<PlaceScreenData> places,
-    List<CategoryType> selectedCategories,
-  ) {
-    return places
-        .where(
-          (e) => selectedCategories
-              .where(
-                (element) => element.getCategoryTypeTitle() == e.category && e.distance > _currentRangeValues.start && e.distance < _currentRangeValues.end,
-              )
-              .toList()
-              .isNotEmpty,
-        )
-        .toList()
-        .length;
-  }
-
-  _clickCallback() {
-    BlocProvider.of<FilterBloc>(context).add(
-      CleanSelectedCategoriesListEvent(),
-    );
-  }
-
-  void _callbackCurrentRangeValues(RangeValues values) {
-    setState(() {
-      _currentRangeValues = values;
-    });
   }
 }

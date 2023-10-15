@@ -101,8 +101,8 @@ class _InfoCardScreenState extends State<InfoCardScreen> {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 24),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 24),
                     child: SelectionWidget(
                       selectionPlan: 'Запланировать',
                       selectionFavorites: 'В Избранное',

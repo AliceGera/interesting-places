@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:interesting_places/presentation/enum/enum.dart';
 import 'package:interesting_places/presentation/screens/filter/filter_screen.dart';
+import 'package:interesting_places/presentation/screens/place_list/data/place_list_screen_data.dart';
 import 'package:interesting_places/presentation/screens/place_list/data/place_screen_data.dart';
 import 'package:interesting_places/presentation/utils/app_color.dart';
 import 'package:interesting_places/presentation/utils/app_images.dart';
 
 class FindPlaceTextFieldWidget extends StatelessWidget {
-  final List<PlaceScreenData> places;
+  final PlaceListScreenData data;
+  final void Function(List<CategoryType> selectedCategories, RangeValues rangeValues, List<PlaceScreenData> sortedPlaces, ) callback;
 
-  FindPlaceTextFieldWidget({
+  const FindPlaceTextFieldWidget({
     Key? key,
-    required this.places,
+    required this.data,
+    required this.callback,
   }) : super(key: key);
 
   @override
@@ -40,7 +44,13 @@ class FindPlaceTextFieldWidget extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (_) =>  FilterScreen(places:places),
+                builder: (_) =>
+                    FilterScreen(
+                      places: data.places,
+                      selectedCategories: data.selectedCategories,
+                      rangeValues: data.rangeValues,
+                      callback: callback,
+                    ),
               ),
             );
           },
@@ -50,7 +60,10 @@ class FindPlaceTextFieldWidget extends StatelessWidget {
           onPressed: () {},
         ),
         border: const OutlineInputBorder(
-          borderSide: BorderSide(width: 1, color: AppColor.background),
+          borderSide: BorderSide(
+            width: 1,
+            color: AppColor.background,
+          ),
         ),
       ),
     );

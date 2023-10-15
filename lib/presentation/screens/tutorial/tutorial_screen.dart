@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:interesting_places/presentation/screens/place_list/place_list_screen.dart';
+import 'package:interesting_places/presentation/screens/bottom_navigation_bar/bottom_navigation_bar_screen.dart';
 import 'package:interesting_places/presentation/screens/tutorial/bloc/tutorial_bloc.dart';
 import 'package:interesting_places/presentation/screens/tutorial/widget/app_bar_tutorial_widget.dart';
 import 'package:interesting_places/presentation/screens/tutorial/widget/main_widget.dart';
@@ -96,7 +96,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const /*AddNewPlaceScreen() */ PlaceListScreen(),
+                                  builder: (context) => const BottomNavigationBarScreen(),
                                 ),
                               );
                             },
