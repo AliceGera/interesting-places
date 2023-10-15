@@ -9,7 +9,7 @@ class TutorialLoadingState implements TutorialState {}
 class TutorialSuccessState implements TutorialState {}
 
 class TutorialFailedState implements TutorialState {
-  final dynamic error;
+  final Exception error;
 
   TutorialFailedState(this.error);
 }
